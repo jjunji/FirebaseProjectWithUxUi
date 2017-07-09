@@ -1,4 +1,4 @@
-package com.example.jhjun.viewpager;
+package com.example.jhjun.viewpager4;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jhjun on 2017-07-09.
+ * Created by jhjun on 2017-07-10.
  */
 
 public class ContentFragmentAdapter extends FragmentPagerAdapter {
@@ -49,10 +49,5 @@ public class ContentFragmentAdapter extends FragmentPagerAdapter {
         public ContentFragmentAdapter set() {
             return new ContentFragmentAdapter(manager, fragments);
         }
-
-        public ContentFragmentAdapter set(int a){
-            return new ContentFragmentAdapter(manager, fragments);
-        }
-
     }
 }
