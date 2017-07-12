@@ -9,8 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.bumptech.glide.Glide;
+
 public class IntroActivity extends AppCompatActivity {
 
+    ImageView imageView_logo;
     ImageView btnStart;
     Spinner spinnerSex;
     Spinner spinnerAge;
@@ -22,12 +25,15 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
+        imageView_logo = (ImageView) findViewById(R.id.imageView_logo) ;
+        Glide.with(this).load(R.drawable.logo).into(imageView_logo);
+
         btnStart = (ImageView) findViewById(R.id.btnStart);
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(IntroActivity.this,MainActivity.class);
-                intent.putExtra("spinerPosition",position);
+                //intent.putExtra("spinerPosition",position);
                 startActivity(intent);
             }
         });
