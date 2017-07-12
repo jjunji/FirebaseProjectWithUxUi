@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView_illust;  // 일러스트 이미지뷰
 
     TextView btnDetail; // 임시 디테일 페이지 이동 버튼
+    TextView btnStyle_recommend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        btnStyle_recommend = (TextView) findViewById(R.id.btnStyle_recommend);
+        btnStyle_recommend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, StyleRecommendActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
 
     }
