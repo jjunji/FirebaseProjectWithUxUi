@@ -1,7 +1,6 @@
 package com.example.jhjun.clook;
 
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,21 +15,18 @@ import com.example.jhjun.clook.util.Remote;
 import com.example.jhjun.clook.util.TaskInterface;
 import com.google.gson.Gson;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_Default;
+import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_LAT;
+import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_LON;
+import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_VERSION;
+import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_WEATHER_PREFIX;
+import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_WEATHER_TODAY;
+
+
 public class MainActivity extends AppCompatActivity implements TaskInterface, View.OnClickListener{
-
-    static final String URL_WEATHER_PREFIX = "http://apis.skplanetx.com/weather/current/hourly?";
-    // static final String URL_SET
-    static final String URL_VERSION = "version=1";
-    static final String URL_LAT = "&lat=";
-    static final String URL_LON = "&lon=";
-    static final String URL_Default = "&city=&county=&village=";
-
-    // 요청 URL : http://apis.skplanetx.com/weather/current/hourly?version=1&lat=37.4870600000&lon=127.0460400000&city=&county=&village=
 
     String WeatherInfoUrl = "";  // 날씨 정보를 얻기 위한 URL주소
     Data data;
@@ -59,9 +55,6 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
         setWeatherInfoUrl(37.4870600000, 127.0460400000);
         Remote.newTask(this);  // Remote 클래스의 newTask 메소드로 현재 액티비티의 정보를 보낸다.
                                  // -> 수신 측은 내가 보낸 정보를 인터페이스로 받기 때문에 TaskInterface의 정의한 메소드 정보만을 사용한다.
-
-
-
 
     }
 
@@ -104,9 +97,8 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
 
     //
     private void setWeatherInfoUrl (double lat, double lon){
-        WeatherInfoUrl = URL_WEATHER_PREFIX + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
+        WeatherInfoUrl = URL_WEATHER_PREFIX + URL_WEATHER_TODAY + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
     }
-
     //
     public Data convertJson(String jsonString) {
         Gson gson = new Gson();
@@ -140,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
         txtToday.setText(sdf.format(date));
         txtTimeNow.setText(sdf2.format(date));
     }
-
 
 }
 

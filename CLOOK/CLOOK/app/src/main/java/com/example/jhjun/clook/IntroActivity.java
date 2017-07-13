@@ -35,7 +35,6 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
         init();
         setSpinner();
 
-
     }
 
     public void init(){
@@ -46,11 +45,12 @@ public class IntroActivity extends AppCompatActivity implements View.OnClickList
 
         spinnerSex = (Spinner) findViewById(R.id.spinnerSex);
         spinnerAge = (Spinner) findViewById(R.id.spinnerAge);
+
+        btnStart.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        btnStart.setOnClickListener(this);
         Intent intent = new Intent(IntroActivity.this,MainActivity.class);
         startActivity(intent);
     }
