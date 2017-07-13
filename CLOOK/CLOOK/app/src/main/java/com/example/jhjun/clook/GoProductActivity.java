@@ -24,8 +24,6 @@ public class GoProductActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-
-
     public void init(){
         imageView_MIXXO = (ImageView) findViewById(R.id.imageView_MIXXO);
         imageView_MIXXO.setOnClickListener(this);

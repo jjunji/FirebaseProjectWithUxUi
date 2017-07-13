@@ -9,13 +9,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.jhjun.clook.domain.pojo_Short.Data_Short;
+import com.example.jhjun.clook.domain.pojo_Short.Forecast3days;
+import com.example.jhjun.clook.domain.pojo_Short.Temperature;
 import com.example.jhjun.clook.domain.pojo_Today.Data;
 import com.example.jhjun.clook.domain.pojo_Today.Hourly;
 import com.example.jhjun.clook.util.Remote;
 import com.example.jhjun.clook.util.TaskInterface;
 import com.google.gson.Gson;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_Default;
@@ -31,13 +36,13 @@ import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_WEATHER_TODA
 
 public class MainActivity extends AppCompatActivity implements TaskInterface, View.OnClickListener{
 
-    String WeatherInfoUrl = "";  // 날씨 정보를 얻기 위한 URL주소
     String WeatherTodayUri = ""; // 현재 날씨 URL
     String WeatherShortUri = ""; // 단기 날씨 URL
     String WeatherMidUri = ""; // 중기 예보 URL
     String WeatherSimpleUri = "";
 
     Data data;
+    Data_Short data_short;
 
     //
     TextView txtTemperNow, txtTemperLow, txtTemperHigh; // 현재온도, 최저,최고 온도
@@ -62,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
 
         setWeatherInfoUrl(37.4870600000, 127.0460400000);
         Remote.newTask(this);  // Remote 클래스의 newTask 메소드로 현재 액티비티의 정보를 보낸다.
-                                 // -> 수신 측은 내가 보낸 정보를 인터페이스로 받기 때문에 TaskInterface의 정의한 메소드 정보만을 사용한다.
+                                 // -> 수신 측은 내가 보낸 정보를 인터페이스로 받기 때문에 TaskInterface 에 정의한 메소드 정보만을 사용한다.
 
     }
 
@@ -111,27 +116,49 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
         WeatherSimpleUri = URL_WEATHER_PREFIX + URL_WEATHER_SIMPLE + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
     }
     //
+
+
     public Data convertJson(String jsonString) {
         Gson gson = new Gson();
         return gson.fromJson(jsonString, Data.class);
     }
 
+    public Data_Short short_convertJson(String jsonString){
+        Gson gson = new Gson();
+        return gson.fromJson(jsonString, Data_Short.class);
+    }
+
     // 인터페이스 메소드
     @Override
-    public String getUrl() {
-        return WeatherTodayUri;
+    public String[] getUrl() {
+        String[] arrayUrl = new String[4];
+        arrayUrl[0] = WeatherTodayUri;
+        arrayUrl[1] = WeatherShortUri;
+        //arrayUrl[2] = WeatherMidUri;
+        //arrayUrl[3] = WeatherSimpleUri;
+        return arrayUrl;
     }
 
     // 인터페이스 메소드
     @Override
     public void postExecute(String jsonString) {
-        data = convertJson(jsonString);  // * 요청에 의한 결과값이 Data 클래스에 들어갔다.
 
-        Log.e("Main", "data ====== " + data.toString());
+        String[] temp = jsonString.split("/");
+
+        data = convertJson(temp[0]);  // * 요청에 의한 결과값이 Data 클래스에 들어갔다.
+        Log.i("data","data============="+data);
+        data_short = short_convertJson(temp[1]);
+
+//        Log.e("Main", "data ====== " + data.toString());
         Hourly[] hourly = data.getWeather().getHourly();
-        txtTemperNow.setText(hourly[0].getTemperature().getTc());
+        Forecast3days[] temperatures = data_short.getWeather().getForecast3days();
+
+        txtTemperNow.setText(temperatures[0].getFcst3hour().getTemperature().getTemp4hour());
+        //txtTemperNow.setText(hourly[0].getTemperature().getTc());
         txtTemperLow.setText(hourly[0].getTemperature().getTmin());
         txtTemperHigh.setText(hourly[0].getTemperature().getTmax());
+
+
 
     }
 
