@@ -18,7 +18,7 @@ import com.example.jhjun.clook.util.Remote;
 import com.example.jhjun.clook.util.TaskInterface;
 import com.google.gson.Gson;
 
-public class IntroActivity extends AppCompatActivity{
+public class IntroActivity extends AppCompatActivity implements View.OnClickListener{
 
     ImageView imageView_logo;
     ImageView btnStart;
@@ -32,22 +32,30 @@ public class IntroActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
+        init();
+        setSpinner();
+
+
+    }
+
+    public void init(){
         imageView_logo = (ImageView) findViewById(R.id.imageView_logo) ;
         Glide.with(this).load(R.drawable.logo).into(imageView_logo);
 
         btnStart = (ImageView) findViewById(R.id.btnStart);
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(IntroActivity.this,MainActivity.class);
-                //intent.putExtra("spinerPosition",position);
-                startActivity(intent);
-            }
-        });
 
         spinnerSex = (Spinner) findViewById(R.id.spinnerSex);
         spinnerAge = (Spinner) findViewById(R.id.spinnerAge);
+    }
 
+    @Override
+    public void onClick(View v) {
+        btnStart.setOnClickListener(this);
+        Intent intent = new Intent(IntroActivity.this,MainActivity.class);
+        startActivity(intent);
+    }
+
+    public void setSpinner(){
         String[] items = {"남자/여자", "남자", "여자"};
         String[] ageitmes = {"10/20/30", "10", "20", "30"};
 
@@ -73,5 +81,4 @@ public class IntroActivity extends AppCompatActivity{
         });
 
     }
-
 }

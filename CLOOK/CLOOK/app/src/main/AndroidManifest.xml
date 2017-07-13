@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jhjun.clook">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -20,7 +20,8 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".DetailWeatherActivity" />
-        <activity android:name=".StyleRecommendActivity"></activity>
+        <activity android:name=".StyleRecommendActivity" />
+        <activity android:name=".GoProductActivity"></activity>
     </application>
 
 </manifest>
