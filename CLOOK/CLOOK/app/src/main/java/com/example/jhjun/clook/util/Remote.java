@@ -37,6 +37,10 @@ public class Remote {
         return result;
     }
 
+
+
+
+
     public static void newTask(final TaskInterface taskInterface) {
 
         new AsyncTask<String, Void, String>() {  // 2. 첫번째 인자로 주소가 들어간다. / 3번째 인자는 Background작업후 반환 값

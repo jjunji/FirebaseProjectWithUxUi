@@ -1,7 +1,7 @@
-package com.example.jhjun.clook.domain;
+package com.example.jhjun.clook.domain.pojo_Mid;
 
 /**
- * Created by jhjun on 2017-07-11.
+ * Created by jhjun on 2017-07-13.
  */
 
 public class Result

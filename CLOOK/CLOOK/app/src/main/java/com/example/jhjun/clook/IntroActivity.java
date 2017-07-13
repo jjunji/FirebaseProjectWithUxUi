@@ -3,20 +3,13 @@ package com.example.jhjun.clook;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.jhjun.clook.domain.Data;
-import com.example.jhjun.clook.domain.Hourly;
-import com.example.jhjun.clook.util.Remote;
-import com.example.jhjun.clook.util.TaskInterface;
-import com.google.gson.Gson;
 
 public class IntroActivity extends AppCompatActivity implements View.OnClickListener{
 

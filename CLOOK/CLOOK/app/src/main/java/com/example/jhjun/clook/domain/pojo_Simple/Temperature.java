@@ -1,14 +1,12 @@
-package com.example.jhjun.clook.domain;
+package com.example.jhjun.clook.domain.pojo_Simple;
 
 /**
- * Created by jhjun on 2017-07-11.
+ * Created by jhjun on 2017-07-13.
  */
 
 public class Temperature
 {
     private String tmax;
-
-    private String tc;
 
     private String tmin;
 
@@ -20,16 +18,6 @@ public class Temperature
     public void setTmax (String tmax)
     {
         this.tmax = tmax;
-    }
-
-    public String getTc ()
-    {
-        return tc;
-    }
-
-    public void setTc (String tc)
-    {
-        this.tc = tc;
     }
 
     public String getTmin ()
@@ -45,6 +33,6 @@ public class Temperature
     @Override
     public String toString()
     {
-        return "ClassPojo [tmax = "+tmax+", tc = "+tc+", tmin = "+tmin+"]";
+        return "ClassPojo [tmax = "+tmax+", tmin = "+tmin+"]";
     }
 }

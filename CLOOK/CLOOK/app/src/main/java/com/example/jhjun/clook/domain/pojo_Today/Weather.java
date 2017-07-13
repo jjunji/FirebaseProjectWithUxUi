@@ -1,4 +1,4 @@
-package com.example.jhjun.clook.domain;
+package com.example.jhjun.clook.domain.pojo_Today;
 
 /**
  * Created by jhjun on 2017-07-11.

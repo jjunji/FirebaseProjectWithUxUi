@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.jhjun.clook.domain.Data;
-import com.example.jhjun.clook.domain.Hourly;
+import com.example.jhjun.clook.domain.pojo_Today.Data;
+import com.example.jhjun.clook.domain.pojo_Today.Hourly;
 import com.example.jhjun.clook.util.Remote;
 import com.example.jhjun.clook.util.TaskInterface;
 import com.google.gson.Gson;
@@ -22,13 +22,21 @@ import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_Default;
 import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_LAT;
 import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_LON;
 import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_VERSION;
+import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_WEATHER_MID;
 import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_WEATHER_PREFIX;
+import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_WEATHER_SHORT;
+import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_WEATHER_SIMPLE;
 import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_WEATHER_TODAY;
 
 
 public class MainActivity extends AppCompatActivity implements TaskInterface, View.OnClickListener{
 
     String WeatherInfoUrl = "";  // 날씨 정보를 얻기 위한 URL주소
+    String WeatherTodayUri = ""; // 현재 날씨 URL
+    String WeatherShortUri = ""; // 단기 날씨 URL
+    String WeatherMidUri = ""; // 중기 예보 URL
+    String WeatherSimpleUri = "";
+
     Data data;
 
     //
@@ -95,9 +103,12 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
         }
     }
 
-    //
+    // 각 Api full 주소 세팅.
     private void setWeatherInfoUrl (double lat, double lon){
-        WeatherInfoUrl = URL_WEATHER_PREFIX + URL_WEATHER_TODAY + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
+        WeatherTodayUri = URL_WEATHER_PREFIX + URL_WEATHER_TODAY + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
+        WeatherShortUri = URL_WEATHER_PREFIX + URL_WEATHER_SHORT + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
+        WeatherMidUri = URL_WEATHER_PREFIX + URL_WEATHER_MID + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
+        WeatherSimpleUri = URL_WEATHER_PREFIX + URL_WEATHER_SIMPLE + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
     }
     //
     public Data convertJson(String jsonString) {
@@ -108,13 +119,14 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
     // 인터페이스 메소드
     @Override
     public String getUrl() {
-        return WeatherInfoUrl;
+        return WeatherTodayUri;
     }
 
     // 인터페이스 메소드
     @Override
     public void postExecute(String jsonString) {
         data = convertJson(jsonString);  // * 요청에 의한 결과값이 Data 클래스에 들어갔다.
+
         Log.e("Main", "data ====== " + data.toString());
         Hourly[] hourly = data.getWeather().getHourly();
         txtTemperNow.setText(hourly[0].getTemperature().getTc());
