@@ -22,12 +22,14 @@ public class Remote {
 
     public static String getData(String url, String method, String appKey ) throws IOException {
 
+        //TODO: 2017-07-14 StringBuilder 는 String 으로 값을 받는 것 보다 퍼포먼스가 좋다.
+
         StringBuilder result =  new StringBuilder();
         URL serverUrl = new URL(url);
         HttpURLConnection con = (HttpURLConnection) serverUrl.openConnection();
 
         con.setRequestMethod(method); // 요청 방식 정의.
-        con.setRequestProperty("appKey",appKey); // RequestProperty : 헤더 정의
+        con.setRequestProperty("appKey", appKey); // RequestProperty : 헤더 정의
 
         int responseCode = con.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -39,7 +41,7 @@ public class Remote {
         } else {
             Log.e("NETWORK", "Error_code" + responseCode);
         }
-        return result.toString();
+        return result.toString();  // return 값이 가는 곳은 doInBackground의 result.
     }
 
 
@@ -50,21 +52,21 @@ public class Remote {
 
             @Override
             protected String doInBackground(String... params) {
-                String result1 = "";
+                String result = "";
                 try {                           // params[0] = 요청 주소.
-                    result1 = getData(params[0],"GET","d0e28214-c90f-3321-90df-937a16c25fa7");  // 3. 위에 getData() 메소드 결과를 result 변수에 저장.
+                    result = getData(params[0],"GET","d0e28214-c90f-3321-90df-937a16c25fa7");  // 3. 위에 getData() 메소드 결과를 result 변수에 저장.
                     // result[1] = getData(params[1]);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                return result1;   // String AsyncTask<> 인자에 정의되있음.
+                return result;   // -> onPostExecute 의 인자(result)로 들어감.
             }
 
             @Override
             protected void onPostExecute(String result) {
                 taskInterface.execute(result, url);  // 4. result를 MainActivity클래스에서 사용할 수 있게 됨. -> jsonString 변수로 받음.
-            }
-        }.execute(url); // 1. MainActivity 클래스에서 getUrl() 하여 API 요청 주소를 가져온다.
+            }                                        // 인자로 url을 추가한 이유 : 요청한 url을 구분하기 위한 구분자로서 사용하기 위해.
+        }.execute(url); // 1. MainActivity 클래스에서 넘겨 받은 url -> params[0] in doInBackground
     }  //
 }

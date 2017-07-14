@@ -19,6 +19,8 @@ import com.example.jhjun.clook.util.Remote;
 import com.example.jhjun.clook.util.TaskInterface;
 import com.google.gson.Gson;
 
+import org.w3c.dom.Text;
+
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,13 +39,17 @@ import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_WEATHER_TODA
 
 public class MainActivity extends AppCompatActivity implements TaskInterface, View.OnClickListener{
 
+    private String TAG = this.getClass().getSimpleName();
+
     Data data;
     Data_Short data_short;
 
     //
     TextView txtTemperNow, txtTemperLow, txtTemperHigh; // 현재온도, 최저,최고 온도
     TextView txtToday, txtTimeNow; // 요일, 시간
-    //
+
+    TextView txtTime_now, txtTime_10, txtTime_13, txtTime_16, txtTime_19, txtTime_22;
+    TextView txtSky_now, txtSky_10, txtSky_13, txtSky_16, txtSky_19, txtSky_22;
 
     ImageView imageView_illust;  // 일러스트 이미지뷰
 
@@ -55,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG,"onCreate");
+
         setContentView(R.layout.activity_main);
 
         init(); // 초기 설정.
@@ -63,14 +71,14 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
 
         setWeatherInfoUrl(37.4870600000, 127.0460400000);
 
+        // 호출 순으로 차례대로 Remote 클래스의 newTask() 메소드 수행.
         Remote.newTask(UrlSetting.WeatherTodayUri,this);  // Remote 클래스의 newTask 메소드로 현재 액티비티의 정보를 보낸다.
-        Remote.newTask(UrlSetting.WeatherShortUri,this);
-                                 // -> 수신 측은 내가 보낸 정보를 인터페이스로 받기 때문에 TaskInterface 에 정의한 메소드 정보만을 사용한다.
-
+        Remote.newTask(UrlSetting.WeatherShortUri,this);  // -> 수신 측은 내가 보낸 정보를 인터페이스로 받기 때문에 TaskInterface 에 정의한 메소드 정보만을 사용한다.
     }
 
     // 각 Api full 주소 세팅.
     private void setWeatherInfoUrl (double lat, double lon){
+        Log.d(TAG,"setWeatherInfoUrl");
         UrlSetting.WeatherTodayUri = URL_WEATHER_PREFIX + URL_WEATHER_TODAY + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
         UrlSetting.WeatherShortUri = URL_WEATHER_PREFIX + URL_WEATHER_SHORT + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
         UrlSetting.WeatherMidUri = URL_WEATHER_PREFIX + URL_WEATHER_MID + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
@@ -79,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
 
 
     public void init(){
+        Log.d(TAG,"init");
+
         imageView_illust = (ImageView) findViewById(R.id.imageView_illust);
         Glide.with(this).load(R.drawable.illust).into(imageView_illust);
 
@@ -91,10 +101,26 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
 
         btnDetail = (TextView) findViewById(R.id.btnDetail);
         btnStyle_recommend = (TextView) findViewById(R.id.btnStyle_recommend);
+
+        txtTime_now = (TextView) findViewById(R.id.txtTime_now);
+        txtTime_10 = (TextView) findViewById(R.id.txtTime_10);
+        txtTime_13 = (TextView) findViewById(R.id.txtTime_13);
+        txtTime_16 = (TextView) findViewById(R.id.txtTime_16);
+        txtTime_19 = (TextView) findViewById(R.id.txtTime_19);
+        txtTime_22 = (TextView) findViewById(R.id.txtTime_22);
+
+/*        txtSky_now = (TextView) findViewById(R.id.txtSky_Now);
+        txtSky_10 = (TextView) findViewById(R.id.txtSky_10);
+        txtSky_13 = (TextView) findViewById(R.id.txtSky_13);
+        txtSky_16 = (TextView) findViewById(R.id.txtSky_16);
+        txtSky_19 = (TextView) findViewById(R.id.txtSky_19);
+        txtSky_22 = (TextView) findViewById(R.id.txtTime_22);*/
     }
 
 
     private void setListener() {
+        Log.d(TAG,"setListener");
+
         btnDetail.setOnClickListener(this);
         btnStyle_recommend.setOnClickListener(this);
     }
@@ -102,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
     // 버튼(이미지뷰) 리스너
     @Override
     public void onClick(View v) {
+        Log.d(TAG,"onClick" + v.getId());
+
         switch (v.getId()){
             case R.id.btnDetail :
                 intent = new Intent(MainActivity.this, DetailWeatherActivity.class);
@@ -116,14 +144,16 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
 
 
     //
-
-
     public Data convertJson(String jsonString) {
+        Log.d(TAG,"convertJson");
+
         Gson gson = new Gson();
         return gson.fromJson(jsonString, Data.class);
     }
 
     public Data_Short short_convertJson(String jsonString){
+        Log.d(TAG,"short_convertJson");
+
         Gson gson = new Gson();
         return gson.fromJson(jsonString, Data_Short.class);
     }
@@ -132,23 +162,22 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
     // 인터페이스 메소드
     @Override
     public void execute(String jsonString, String url) {
+        Log.d(TAG,"execute");
+
         if(url.equals(UrlSetting.WeatherTodayUri)) {
             data = convertJson(jsonString);  // * 요청에 의한 결과값이 Data 클래스에 들어갔다.
-
-            Hourly[] hourly = data.getWeather().getHourly();
-
-            txtTemperLow.setText(hourly[0].getTemperature().getTmin());
-            txtTemperHigh.setText(hourly[0].getTemperature().getTmax());
+            setPresentTime();
         }else if(url.equals(UrlSetting.WeatherShortUri)){
             data_short = short_convertJson(jsonString);
-
+            setDailyTime();
         }
     }
-
 
     // 현재 날짜 & 시간
     public void dateSetting(){
         Date date = new Date();
+        Log.d(TAG,"dateSetting");
+
 
         SimpleDateFormat sdf = new SimpleDateFormat("E요일");
         SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm a");
@@ -156,7 +185,44 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
         txtTimeNow.setText(sdf2.format(date));
     }
 
+    public void setPresentTime(){
+        Log.d(TAG,"setPresentTime");
+
+        Hourly[] hourly = data.getWeather().getHourly();
+        txtTemperLow.setText(hourly[0].getTemperature().getTmin());
+        txtTemperHigh.setText(hourly[0].getTemperature().getTmax());
+        txtTime_now.setText(hourly[0].getTemperature().getTc());
+        txtTemperNow.setText(hourly[0].getTemperature().getTc());
+    }
+
+    public void setDailyTime(){
+        Log.d(TAG,"setDailyTime");
+        Forecast3days[] forecast3dayses = data_short.getWeather().getForecast3days();
+
+        txtTime_10.setText(forecast3dayses[0].getFcst3hour().getTemperature().getTemp10hour());
+        txtTime_13.setText(forecast3dayses[0].getFcst3hour().getTemperature().getTemp13hour());
+        txtTime_16.setText(forecast3dayses[0].getFcst3hour().getTemperature().getTemp16hour());
+        txtTime_19.setText(forecast3dayses[0].getFcst3hour().getTemperature().getTemp19hour());
+        txtTime_22.setText(forecast3dayses[0].getFcst3hour().getTemperature().getTemp22hour());
+    }
+
+    public void setSky(){
+        Forecast3days[] forecast3dayses = data_short.getWeather().getForecast3days();
+
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*        Intent intent = new Intent();

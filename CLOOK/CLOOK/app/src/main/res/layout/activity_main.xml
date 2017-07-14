@@ -201,13 +201,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView7">
 
                 <ImageView
-                    android:id="@+id/imageView10"
+                    android:id="@+id/txtSky_16"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     app:srcCompat="@drawable/icon_sun" />
 
                 <TextView
-                    android:id="@+id/textView11"
+                    android:id="@+id/txtTime_16"
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
@@ -220,8 +220,8 @@
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="지금"
                     android:layout_weight="1"
+                    android:text="16시"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -252,18 +252,18 @@
                 app:layout_constraintVertical_bias="0.6">
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/txtSky_10"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     app:srcCompat="@drawable/icon_sun" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/txtTime_10"
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="30C"
                     android:layout_weight="1"
+                    android:text="30C"
                     android:textAlignment="center" />
 
                 <TextView
@@ -271,8 +271,8 @@
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="지금"
                     android:layout_weight="1"
+                    android:text="10시"
                     android:textAlignment="center" />
 
             </LinearLayout>
@@ -291,13 +291,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView7">
 
                 <ImageView
-                    android:id="@+id/imageView7"
+                    android:id="@+id/txtSky_13"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     app:srcCompat="@drawable/icon_sun" />
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/txtTime_13"
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
@@ -310,8 +310,8 @@
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="지금"
                     android:layout_weight="1"
+                    android:text="13시"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -336,18 +336,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView7">
 
                 <ImageView
-                    android:id="@+id/imageView13"
+                    android:id="@+id/txtSky_19"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     app:srcCompat="@drawable/icon_sun" />
 
                 <TextView
-                    android:id="@+id/textView14"
+                    android:id="@+id/txtTime_19"
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="30C"
                     android:layout_weight="1"
+                    android:text="30C"
                     android:textAlignment="center" />
 
                 <TextView
@@ -355,8 +355,8 @@
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="지금"
                     android:layout_weight="1"
+                    android:text="19시"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -376,19 +376,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView7">
 
                 <ImageView
-                    android:id="@+id/imageView16"
+                    android:id="@+id/txtSky_21"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    app:srcCompat="@drawable/icon_sun"
-                    />
+                    app:srcCompat="@drawable/icon_sun" />
 
                 <TextView
-                    android:id="@+id/textView17"
+                    android:id="@+id/txtTime_22"
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="30C"
                     android:layout_weight="1"
+                    android:text="30C"
                     android:textAlignment="center" />
 
                 <TextView
@@ -396,8 +395,8 @@
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="지금"
                     android:layout_weight="1"
+                    android:text="22시"
                     android:textAlignment="center" />
 
             </LinearLayout>
@@ -416,17 +415,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView7">
 
                 <ImageView
-                    android:id="@+id/imageView_1"
+                    android:id="@+id/txtSky_Now"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    app:srcCompat="@drawable/icon_sun"/>
+                    app:srcCompat="@drawable/icon_sun" />
 
                 <TextView
-                    android:id="@+id/textView_2"
+                    android:id="@+id/txtTime_now"
                     android:layout_width="36dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginTop="6dp"
+                    android:layout_weight="1"
                     android:text="30C"
                     android:textAlignment="center" />
 

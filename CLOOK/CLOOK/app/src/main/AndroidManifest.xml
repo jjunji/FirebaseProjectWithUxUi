@@ -22,6 +22,13 @@
         <activity android:name=".DetailWeatherActivity" />
         <activity android:name=".StyleRecommendActivity" />
         <activity android:name=".GoProductActivity"></activity>
+        <activity android:name=".StartActivity" >
+<!--            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
     </application>
 
 </manifest>
