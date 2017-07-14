@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.jhjun.clook.UrlSettingPack.UrlSetting;
 import com.example.jhjun.clook.domain.pojo_Short.Data_Short;
 import com.example.jhjun.clook.domain.pojo_Short.Forecast3days;
 import com.example.jhjun.clook.domain.pojo_Short.Temperature;
@@ -36,11 +37,6 @@ import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_WEATHER_TODA
 
 public class MainActivity extends AppCompatActivity implements TaskInterface, View.OnClickListener{
 
-    String WeatherTodayUri = ""; // 현재 날씨 URL
-    String WeatherShortUri = ""; // 단기 날씨 URL
-    String WeatherMidUri = ""; // 중기 예보 URL
-    String WeatherSimpleUri = "";
-
     Data data;
     Data_Short data_short;
 
@@ -66,9 +62,19 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
         dateSetting(); // 현재 요일,시간 설정.
 
         setWeatherInfoUrl(37.4870600000, 127.0460400000);
-        Remote.newTask(this);  // Remote 클래스의 newTask 메소드로 현재 액티비티의 정보를 보낸다.
+
+        Remote.newTask(UrlSetting.WeatherTodayUri,this);  // Remote 클래스의 newTask 메소드로 현재 액티비티의 정보를 보낸다.
+        Remote.newTask(UrlSetting.WeatherShortUri,this);
                                  // -> 수신 측은 내가 보낸 정보를 인터페이스로 받기 때문에 TaskInterface 에 정의한 메소드 정보만을 사용한다.
 
+    }
+
+    // 각 Api full 주소 세팅.
+    private void setWeatherInfoUrl (double lat, double lon){
+        UrlSetting.WeatherTodayUri = URL_WEATHER_PREFIX + URL_WEATHER_TODAY + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
+        UrlSetting.WeatherShortUri = URL_WEATHER_PREFIX + URL_WEATHER_SHORT + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
+        UrlSetting.WeatherMidUri = URL_WEATHER_PREFIX + URL_WEATHER_MID + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
+        UrlSetting.WeatherSimpleUri = URL_WEATHER_PREFIX + URL_WEATHER_SIMPLE + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
     }
 
 
@@ -108,13 +114,7 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
         }
     }
 
-    // 각 Api full 주소 세팅.
-    private void setWeatherInfoUrl (double lat, double lon){
-        WeatherTodayUri = URL_WEATHER_PREFIX + URL_WEATHER_TODAY + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
-        WeatherShortUri = URL_WEATHER_PREFIX + URL_WEATHER_SHORT + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
-        WeatherMidUri = URL_WEATHER_PREFIX + URL_WEATHER_MID + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
-        WeatherSimpleUri = URL_WEATHER_PREFIX + URL_WEATHER_SIMPLE + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
-    }
+
     //
 
 
@@ -128,39 +128,23 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
         return gson.fromJson(jsonString, Data_Short.class);
     }
 
-    // 인터페이스 메소드
-    @Override
-    public String[] getUrl() {
-        String[] arrayUrl = new String[4];
-        arrayUrl[0] = WeatherTodayUri;
-        arrayUrl[1] = WeatherShortUri;
-        //arrayUrl[2] = WeatherMidUri;
-        //arrayUrl[3] = WeatherSimpleUri;
-        return arrayUrl;
-    }
 
     // 인터페이스 메소드
     @Override
-    public void postExecute(String jsonString) {
+    public void execute(String jsonString, String url) {
+        if(url.equals(UrlSetting.WeatherTodayUri)) {
+            data = convertJson(jsonString);  // * 요청에 의한 결과값이 Data 클래스에 들어갔다.
 
-        String[] temp = jsonString.split("/");
+            Hourly[] hourly = data.getWeather().getHourly();
 
-        data = convertJson(temp[0]);  // * 요청에 의한 결과값이 Data 클래스에 들어갔다.
-        Log.i("data","data============="+data);
-        data_short = short_convertJson(temp[1]);
+            txtTemperLow.setText(hourly[0].getTemperature().getTmin());
+            txtTemperHigh.setText(hourly[0].getTemperature().getTmax());
+        }else if(url.equals(UrlSetting.WeatherShortUri)){
+            data_short = short_convertJson(jsonString);
 
-//        Log.e("Main", "data ====== " + data.toString());
-        Hourly[] hourly = data.getWeather().getHourly();
-        Forecast3days[] temperatures = data_short.getWeather().getForecast3days();
-
-        txtTemperNow.setText(temperatures[0].getFcst3hour().getTemperature().getTemp4hour());
-        //txtTemperNow.setText(hourly[0].getTemperature().getTc());
-        txtTemperLow.setText(hourly[0].getTemperature().getTmin());
-        txtTemperHigh.setText(hourly[0].getTemperature().getTmax());
-
-
-
+        }
     }
+
 
     // 현재 날짜 & 시간
     public void dateSetting(){

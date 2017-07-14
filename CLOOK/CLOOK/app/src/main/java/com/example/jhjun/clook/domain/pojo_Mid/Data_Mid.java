@@ -1,10 +1,10 @@
-package com.example.jhjun.clook.domain.pojo_Today;
+package com.example.jhjun.clook.domain.pojo_Mid;
 
 /**
- * Created by jhjun on 2017-07-11.
+ * Created by jhjun on 2017-07-14.
  */
 
-public class  Data
+public class Data_Mid
 {
     private Result result;
 
@@ -45,6 +45,6 @@ public class  Data
     @Override
     public String toString()
     {
-        return "ClassPojo [result = "+result+", common = "+common+", weather = "+weather+"]"; // weather는 gson형태로 weather의 하위 값들이 모두 들어가 있음.
+        return "ClassPojo [result = "+result+", common = "+common+", weather = "+weather+"]";
     }
 }
