@@ -1,10 +1,17 @@
 package com.example.jhjun.clook;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
+
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,10 +44,8 @@ import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_WEATHER_SIMP
 import static com.example.jhjun.clook.UrlSettingPack.UrlSetting.URL_WEATHER_TODAY;
 
 
-public class MainActivity extends AppCompatActivity implements TaskInterface, View.OnClickListener{
-
-    private String TAG = this.getClass().getSimpleName();
-
+public class MainActivity extends Fragment implements TaskInterface
+{
     Data data;
     Data_Short data_short;
 
@@ -54,31 +59,36 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
     ImageView imageView_illust;  // 일러스트 이미지뷰
 
     TextView btnDetail; // 임시 디테일 페이지 이동 버튼
-    TextView btnStyle_recommend;
 
-    Intent intent;
+    Context context;
 
+    public MainActivity() {
+        super();
+    }
+
+    public static MainActivity newInstance(Context context){
+        MainActivity mainActivity = new MainActivity();
+        mainActivity.context = context;
+        return mainActivity;
+    }
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(TAG,"onCreate");
-
-        setContentView(R.layout.activity_main);
-
-        init(); // 초기 설정.
-        setListener(); // 리스너 세팅.
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_main,container,false);
+        init(view); // 초기 설정.
         dateSetting(); // 현재 요일,시간 설정.
-
         setWeatherInfoUrl(37.4870600000, 127.0460400000);
 
         // 호출 순으로 차례대로 Remote 클래스의 newTask() 메소드 수행.
         Remote.newTask(UrlSetting.WeatherTodayUri,this);  // Remote 클래스의 newTask 메소드로 현재 액티비티의 정보를 보낸다.
         Remote.newTask(UrlSetting.WeatherShortUri,this);  // -> 수신 측은 내가 보낸 정보를 인터페이스로 받기 때문에 TaskInterface 에 정의한 메소드 정보만을 사용한다.
+
+        return view;
     }
 
     // 각 Api full 주소 세팅.
     private void setWeatherInfoUrl (double lat, double lon){
-        Log.d(TAG,"setWeatherInfoUrl");
         UrlSetting.WeatherTodayUri = URL_WEATHER_PREFIX + URL_WEATHER_TODAY + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
         UrlSetting.WeatherShortUri = URL_WEATHER_PREFIX + URL_WEATHER_SHORT + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
         UrlSetting.WeatherMidUri = URL_WEATHER_PREFIX + URL_WEATHER_MID + URL_VERSION + URL_LAT + lat + URL_LON + lon + URL_Default;
@@ -86,28 +96,32 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
     }
 
 
-    public void init(){
-        Log.d(TAG,"init");
-
-        imageView_illust = (ImageView) findViewById(R.id.imageView_illust);
+    public void init(View view){
+        imageView_illust = (ImageView) view.findViewById(R.id.imageView_illust);
         Glide.with(this).load(R.drawable.illust).into(imageView_illust);
 
-        txtTemperNow = (TextView) findViewById(R.id.txtTemperNow);
-        txtTemperLow = (TextView) findViewById(R.id.txtTemperLow);
-        txtTemperHigh = (TextView) findViewById(R.id.txtTemperHigh);
+        txtTemperNow = (TextView) view.findViewById(R.id.txtTemperNow);
+        txtTemperLow = (TextView) view.findViewById(R.id.txtTemperLow);
+        txtTemperHigh = (TextView) view.findViewById(R.id.txtTemperHigh);
 
-        txtToday = (TextView) findViewById(R.id.txtToday);
-        txtTimeNow = (TextView) findViewById(R.id.txtTimeNow);
+        txtToday = (TextView) view.findViewById(R.id.txtToday);
+        txtTimeNow = (TextView) view.findViewById(R.id.txtTimeNow);
 
-        btnDetail = (TextView) findViewById(R.id.btnDetail);
-        btnStyle_recommend = (TextView) findViewById(R.id.btnStyle_recommend);
+        btnDetail = (TextView) view.findViewById(R.id.btnDetail);
+        btnDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),DetailWeatherActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        txtTime_now = (TextView) findViewById(R.id.txtTime_now);
-        txtTime_10 = (TextView) findViewById(R.id.txtTime_10);
-        txtTime_13 = (TextView) findViewById(R.id.txtTime_13);
-        txtTime_16 = (TextView) findViewById(R.id.txtTime_16);
-        txtTime_19 = (TextView) findViewById(R.id.txtTime_19);
-        txtTime_22 = (TextView) findViewById(R.id.txtTime_22);
+        txtTime_now = (TextView) view.findViewById(R.id.txtTime_now);
+        txtTime_10 = (TextView) view.findViewById(R.id.txtTime_10);
+        txtTime_13 = (TextView) view.findViewById(R.id.txtTime_13);
+        txtTime_16 = (TextView) view.findViewById(R.id.txtTime_16);
+        txtTime_19 = (TextView) view.findViewById(R.id.txtTime_19);
+        txtTime_22 = (TextView) view.findViewById(R.id.txtTime_22);
 
 /*        txtSky_now = (TextView) findViewById(R.id.txtSky_Now);
         txtSky_10 = (TextView) findViewById(R.id.txtSky_10);
@@ -118,42 +132,13 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
     }
 
 
-    private void setListener() {
-        Log.d(TAG,"setListener");
-
-        btnDetail.setOnClickListener(this);
-        btnStyle_recommend.setOnClickListener(this);
-    }
-
-    // 버튼(이미지뷰) 리스너
-    @Override
-    public void onClick(View v) {
-        Log.d(TAG,"onClick" + v.getId());
-
-        switch (v.getId()){
-            case R.id.btnDetail :
-                intent = new Intent(MainActivity.this, DetailWeatherActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.btnStyle_recommend :
-                intent = new Intent(MainActivity.this, StyleRecommendActivity.class);
-                startActivity(intent);
-                break;
-        }
-    }
-
-
     //
     public Data convertJson(String jsonString) {
-        Log.d(TAG,"convertJson");
-
         Gson gson = new Gson();
         return gson.fromJson(jsonString, Data.class);
     }
 
     public Data_Short short_convertJson(String jsonString){
-        Log.d(TAG,"short_convertJson");
-
         Gson gson = new Gson();
         return gson.fromJson(jsonString, Data_Short.class);
     }
@@ -162,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
     // 인터페이스 메소드
     @Override
     public void execute(String jsonString, String url) {
-        Log.d(TAG,"execute");
 
         if(url.equals(UrlSetting.WeatherTodayUri)) {
             data = convertJson(jsonString);  // * 요청에 의한 결과값이 Data 클래스에 들어갔다.
@@ -176,8 +160,6 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
     // 현재 날짜 & 시간
     public void dateSetting(){
         Date date = new Date();
-        Log.d(TAG,"dateSetting");
-
 
         SimpleDateFormat sdf = new SimpleDateFormat("E요일");
         SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm a");
@@ -186,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
     }
 
     public void setPresentTime(){
-        Log.d(TAG,"setPresentTime");
 
         Hourly[] hourly = data.getWeather().getHourly();
         txtTemperLow.setText(hourly[0].getTemperature().getTmin());
@@ -196,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements TaskInterface, Vi
     }
 
     public void setDailyTime(){
-        Log.d(TAG,"setDailyTime");
         Forecast3days[] forecast3dayses = data_short.getWeather().getForecast3days();
 
         txtTime_10.setText(forecast3dayses[0].getFcst3hour().getTemperature().getTemp10hour());

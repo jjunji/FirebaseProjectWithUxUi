@@ -1,65 +1,52 @@
 package com.example.jhjun.clook;
 
+import android.content.Context;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.Inflater;
 
 /**
  * Created by jhjun on 2017-07-14.
  */
 
-public class pagerAdapter extends PagerAdapter{
+public class pagerAdapter extends FragmentPagerAdapter
+{
+    //LinearLayout container;
+    Context context;
 
-    LinearLayout container;
+    public pagerAdapter(FragmentManager fm, Context context) {
+        super(fm);
+        this.context = context;  // StartActivity
+    }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public int getCount() {
         return 2;
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view == object;
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        LayoutInflater inflater = LayoutInflater.from(container.getContext());
-
-//        ConstraintLayout constraintLayout = (ConstraintLayout)inflater.inflate(R.layout.activity_main,null);
-        View currentLayout = null;
-
-//        View constraintLayout = inflater.inflate(R.layout.activity_main,null);
-//        View linearLayout = inflater.inflate(R.layout.activity_style_recommend,null);
-
+    public Fragment getItem(int position) {
         switch (position){
-            case 0:
-                currentLayout = inflater.inflate(R.layout.activity_main,null);
-                break;
-            case 1:
-                currentLayout = inflater.inflate(R.layout.activity_style_recommend,null);
-                break;
+            case 0:  // MainFragment
+                MainActivity mainActivity = MainActivity.newInstance(context);
+                return mainActivity;
+            case 1:  // styleRecommendActivity
+                StyleRecommendActivity styleRecommendActivity = StyleRecommendActivity.newInstance(context);
+                return styleRecommendActivity;
             default:
-                break;
+                return null;
         }
-        container.addView(currentLayout);
-
-        return currentLayout;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        super.destroyItem(container, position, object);
-        View currentView= (View) object;
-        container.removeView(currentView);
     }
 }
