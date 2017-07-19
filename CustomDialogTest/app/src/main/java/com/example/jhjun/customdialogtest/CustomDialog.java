@@ -27,7 +27,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomDialog extends Dialog {
+public class CustomDialog extends Dialog{
 
     openActivity activity;
     ImageView imgClose, imgSearch;
@@ -63,17 +63,14 @@ public class CustomDialog extends Dialog {
             this.data = data;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder implements OnClickListener{
+        class ViewHolder extends RecyclerView.ViewHolder{
+            //OnClickListener listener;
             TextView txtRegion;
 
             public ViewHolder(View v) {
                 super(v);
                 txtRegion = (TextView) v.findViewById(R.id.txtRegion);
-            }
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                activity.Setting(data[which]);
+                //v.setOnClickListener((View.OnClickListener) listener);
             }
         }
 
@@ -85,7 +82,14 @@ public class CustomDialog extends Dialog {
         }
 
         @Override
-        public void onBindViewHolder(CustomRecyclerViewAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(CustomRecyclerViewAdapter.ViewHolder holder, final int position) {
+            holder.txtRegion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    activity.Setting(data[position]);
+                    Log.e("CustomDialog","data[position]============="+data[position]);
+                }
+            });
             holder.txtRegion.setText(data[position]);
         }
 
