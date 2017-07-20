@@ -32,11 +32,11 @@ public class openActivity extends AppCompatActivity {
             }
         });
 
-        txtResult.setText(data);
     }
 
     public void Setting(String data) {
         this.data = data;
-        Log.e("openActivity","data=========================" + data);
+        txtResult.setText(data);
+        Log.e("openActivity","data=========================" + this.data);
     }
 }

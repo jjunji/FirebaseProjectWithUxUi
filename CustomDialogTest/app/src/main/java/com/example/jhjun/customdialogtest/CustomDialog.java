@@ -56,7 +56,7 @@ public class CustomDialog extends Dialog{
     }
 
     class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.ViewHolder>{
-
+        int position;
         String[] data;
 
         public CustomRecyclerViewAdapter(String[] data) {
@@ -67,6 +67,10 @@ public class CustomDialog extends Dialog{
             //OnClickListener listener;
             TextView txtRegion;
 
+            // TODO: 2017-07-20
+            // Holder에 리스너를 달았을 때 생기는 문제점 과 onBindViewHolder에 리스너를 다는 경우를 구분하자.
+            // -> Holder의 재사용성으로 인해 BInd에 위젯 세팅과 같이 리스너를 달아주는 것이 알맞다고 생각됨.
+            
             public ViewHolder(View v) {
                 super(v);
                 txtRegion = (TextView) v.findViewById(R.id.txtRegion);
@@ -82,14 +86,22 @@ public class CustomDialog extends Dialog{
         }
 
         @Override
-        public void onBindViewHolder(CustomRecyclerViewAdapter.ViewHolder holder, final int position) {
-            holder.txtRegion.setOnClickListener(new View.OnClickListener() {
+        public void onBindViewHolder(final CustomRecyclerViewAdapter.ViewHolder holder, final int position) {
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     activity.Setting(data[position]);
-                    Log.e("CustomDialog","data[position]============="+data[position]);
                 }
             });
+
+//            holder.txtRegion.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    activity.Setting(data[position]);
+//                    Log.e("CustomDialog","data[position]============="+data[position]);
+//                }
+//            });
             holder.txtRegion.setText(data[position]);
         }
 
