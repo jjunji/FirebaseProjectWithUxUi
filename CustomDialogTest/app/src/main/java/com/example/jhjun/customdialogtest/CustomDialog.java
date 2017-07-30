@@ -70,7 +70,7 @@ public class CustomDialog extends Dialog{
             // TODO: 2017-07-20
             // Holder에 리스너를 달았을 때 생기는 문제점 과 onBindViewHolder에 리스너를 다는 경우를 구분하자.
             // -> Holder의 재사용성으로 인해 BInd에 위젯 세팅과 같이 리스너를 달아주는 것이 알맞다고 생각됨.
-            
+
             public ViewHolder(View v) {
                 super(v);
                 txtRegion = (TextView) v.findViewById(R.id.txtRegion);
